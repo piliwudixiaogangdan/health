@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--配置数据库连接信息-->
+    <context:property-placeholder location="classpath:jdbc.properties"></context:property-placeholder>
+    <!--配置数据库-->
+    <bean class="com.alibaba.druid.pool.DruidDataSource" id="dataSourceFactory">
+        <property name="url" value="${jdbc.url}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+    </bean>
+    <!--配置sqlsessionbean-->
+    <bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--配置数据源-->
+        <property name="dataSource" ref="dataSourceFactory"/>
+        <!--配置映射文件位置-->
+        <property name="mapperLocations" value="classpath:mappers/*.xml"></property>
+        <!--配置mybatis核心配置文件位置-->
+        <property name="configLocation" value="classpath:mybatis.xml"/>
+        <!--配置别名映射-->
+        <property name="typeAliasesPackage" value="health_pojo"></property>
+    </bean>
+
+    <!--配置装配mapper-->
+    <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="health_mapper"></property>
+     </bean>
+</beans>

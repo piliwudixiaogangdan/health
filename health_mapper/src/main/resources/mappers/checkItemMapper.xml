@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="health_mapper.CheckItemMpper">
+
+    <!--添加检查项-->
+    <insert id="addCheckItem" >
+        insert into t_checkitem values (null , #{code},#{name},#{sex},#{age},#{price},#{type},#{attention},#{remark})
+    </insert>
+
+    <!--查询总记录数-->
+    <select id="findTotalRecord" resultType="Long">
+        select count(id) from t_checkitem
+        <if test="queryString != null and queryString.trim() != ''">
+            where name like '%' #{queryString} '%'
+        </if>
+    </select>
+
+    <!--分页查询-->
+    <select id="findCheckItem" resultType="CheckItem">
+        select * from t_checkitem
+        <if test="queryString != null and queryString.trim() != ''">
+          where name like '%' #{queryString} '%'
+        </if>
+        limit #{front} , #{pageSize}
+    </select>
+
+    <!--修改数据-->
+    <update id="updateCheckItem">
+        update t_checkitem set code=#{code} , name=#{name} ,sex=#{sex} , age=#{age} , price=#{price} , type=#{type} , attention=#{attention} , remark=#{remark}  where id=#{id}
+    </update>
+
+    <!--删除数据-->
+    <delete id="delateCheckItem">
+        delete from t_checkitem where id = #{id}
+    </delete>
+
+    <!--查询所有数据-->
+    <select id="findAllCheckItem" resultType="CheckItem">
+        select code , name , remark , id from t_checkitem
+    </select>
+</mapper>

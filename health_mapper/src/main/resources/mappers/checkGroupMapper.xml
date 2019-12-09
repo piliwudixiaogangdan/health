@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="health_mapper.CheckGroupMapper">
+
+    <!--添加新的检查组-->
+    <update id="addCheckGroup" useGeneratedKeys="true" keyProperty="id">
+        insert into t_checkgroup values (null , #{code},#{name},#{helpCode},#{sex},#{remark},#{attention})
+    </update>
+
+    <!--添加检查组和检查向之间的关系-->
+    <insert id="addGroupAanItems">
+        insert into t_checkgroup_checkitem values(#{groupId},#{itemId})
+    </insert>
+
+    <!--查询检查组的所有数据-->
+    <select id="findCheckGroup" resultType="checkGroup">
+        select *  from t_checkgroup
+            <if test="queryString != null and queryString.trim() != '' ">
+                where code=#{queryString} or helpCode=#{queryString} or name like '%' #{queryString} '%'
+            </if>
+    </select>
+
+    <!--查询该检查组所包含的检查项-->
+    <select id="findCollection" resultType="int">
+        select checkitem_id from t_checkgroup_checkitem where checkgroup_id = #{groupId}
+    </select>
+
+    <!--修改检查组-->
+    <update id="editCheckGroup">
+        update t_checkgroup set code=#{code} , name=#{name} , helpCode=#{helpCode} , sex=#{sex} , remark=#{remark} , attention=#{attention} where id=#{id}
+    </update>
+
+    <delete id="clearRelation">
+        delete from t_checkgroup_checkitem where checkgroup_id=#{groupId}
+    </delete>
+
+    <delete id="deleteGroup">
+        delete from t_checkgroup where checkgroup_id=#{groupId}
+    </delete>
+</mapper>
