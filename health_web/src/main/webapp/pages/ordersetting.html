@@ -140,6 +140,30 @@
             methods: {
 				//预约设置
                 handleOrderSet(day){
+
+                        this.$prompt('请输入可预约数量：', '提示', {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                            inputPattern: /[1-9]\d*/,
+                            inputErrorMessage: '请输入正确的格式：'
+                        }).then(({ value }) => {
+                            axios.post("/ordersetting/handleOrderSet.do?&count="+value , day).then((res) => {
+                                if (res.data.flag) {
+                                    this.initData();
+                                    this.$message.success("设置成功！");
+                                } else {
+                                    this.$message.error("设置失败！");
+                                }
+                                this.initData(null);
+                            });
+                        }).catch(() => {
+                            this.$message({
+                                type: 'info',
+                                message: '取消输入'
+                            });
+                        });
+
+
                 },
 				//上传之前进行文件格式校验
                 beforeUpload(file){
@@ -223,13 +247,19 @@
                         this.days.push(dayobject);
                     }
                     
-                    /*this.leftobj = [
-                        { date: 1, number: 120, reservations: 1 },
-                        { date: 3, number: 120, reservations: 1 },
-                        { date: 4, number: 120, reservations: 120 },
-                        { date: 6, number: 120, reservations: 1 },
-                        { date: 8, number: 120, reservations: 1 }
-                    ];*/
+                    // this.leftobj = [
+                    //     { date: 1, number: 120, reservations: 1 },
+                    //     { date: 3, number: 120, reservations: 1 },
+                    //     { date: 4, number: 120, reservations: 120 },
+                    //     { date: 6, number: 120, reservations: 1 },
+                    //     { date: 8, number: 120, reservations: 1 }
+                    // ];
+
+                    axios.post("/ordersetting/findOrderSettingByDate.do?year="+this.currentYear+"&month="+this.currentMonth).then((res) => {
+                        if (res.data.flag) {
+                            this.leftobj = res.data.data;
+                        }
+                    });
                 },
 				//切换到当前月份
                 goCurrentMonth: function (year, month) {

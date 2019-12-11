@@ -82,7 +82,7 @@ public class SetmealWeb {
             try {
                 ImageUtil.uploadFile(file.getBytes() , fileName);
                 jedisPool.getResource().sadd("qnyImg" , fileName);
-                return new Result(true, "图片上传成功！",  "http://q271bmd79.bkt.clouddn.com/"+fileName);
+                return new Result(true, "图片上传成功！",  fileName);
                 //上传图片成功之后向redis数据库保存一份
 
             } catch (IOException e) {

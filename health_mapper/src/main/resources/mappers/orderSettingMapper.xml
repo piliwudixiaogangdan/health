@@ -9,4 +9,20 @@
             ( null, #{orderSetting.orderDate},#{orderSetting.number} , null )
         </foreach>
     </insert>
+
+    <insert id="addOrderSetting">
+        insert into t_ordersetting value (null , #{orderDate} , #{number} , #{reservations})
+    </insert>
+    <update id="update">
+        update t_ordersetting set number = #{number} where orderDate=#{orderDate}
+    </update>
+    <select id="findOrderSetting" resultType="orderSetting">
+        select * from t_ordersetting where orderDate = #{orderDate}
+    </select>
+    <select id="findOrderSettingsByDate" resultType="orderSetting">
+        select * from t_ordersetting where orderDate between #{frontDate} and #{afterDate}
+    </select>
+    <update id="handleOrderSet" >
+        update t_ordersetting set number=#{count} where orderDate = #{day}
+    </update>
 </mapper>

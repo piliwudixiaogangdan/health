@@ -67,6 +67,7 @@ public class ImageUtil {
         BucketManager bucketManager = new BucketManager(auth, cfg);
         try {
             bucketManager.delete(bucket, imageName);
+            System.out.println("文件被删除了！！");
         } catch (QiniuException ex) {
             //如果遇到异常，说明删除失败
             System.err.println(ex.code());

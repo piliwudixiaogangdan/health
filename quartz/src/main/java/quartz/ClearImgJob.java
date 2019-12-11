@@ -13,13 +13,26 @@ public class ClearImgJob {
     private JedisPool jedisPool;
 
     public void clearImg() {
-        Set<String> sdiff = jedisPool.getResource().sdiff("sjkImg", "qnyImg");
+        Set<String> sdiff = jedisPool.getResource().sdiff( "qnyImg","sjkImg");
+
+        Set<String> sjkImg = jedisPool.getResource().smembers("sjkImg");
+        for (String s : sjkImg) {
+            System.out.println(s);
+        }
+
+        System.out.println("------------------------");
+
+        Set<String> qnyImg = jedisPool.getResource().smembers("qnyImg");
+        for (String s : qnyImg) {
+            System.out.println(s);
+        }
+
+        System.out.println(sdiff.size());
         //遍历差值，获取其中的图片名称
         for (String imageName : sdiff) {
             ImageUtil.deleteFile(imageName);
-            jedisPool.getResource().srem("sjkImg",imageName);
+            System.out.println(imageName);
+            jedisPool.getResource().srem("qnyImg",imageName);
         }
-
-        System.out.println("执行完毕！！！");
     }
 }
