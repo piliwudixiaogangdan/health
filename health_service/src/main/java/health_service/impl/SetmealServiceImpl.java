@@ -3,10 +3,13 @@ package health_service.impl;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import health_common.ImageUtil;
 import health_interface.SetmealService;
+import health_mapper.CheckGroupMapper;
 import health_mapper.SetmealMapper;
 import health_pojo.entity.PageResult;
 import health_pojo.entity.QueryPageBean;
+import health_pojo.pojo.CheckGroup;
 import health_pojo.pojo.Setmeal;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -18,6 +21,8 @@ public class SetmealServiceImpl implements SetmealService {
     @Autowired
     private SetmealMapper setmealMapper;
 
+    @Autowired
+    private CheckGroupMapper checkGroupMapper;
     @Override
     public PageResult findSetmeal(QueryPageBean queryPageBean) {
 
@@ -32,21 +37,25 @@ public class SetmealServiceImpl implements SetmealService {
      * @param setmeal
      */
     @Override
-    public void addSetmeal(Setmeal setmeal) {
+    public void addSetmeal(Setmeal setmeal , Integer[] itemIds) {
         //添加套餐内容
         setmealMapper.addSetmeal(setmeal);
         //添加套餐中所包含的检查组
-        if (setmeal.getCheckGroups() != null) {
-            setmealMapper.addCheckGroups(setmeal.getId(), setmeal.getCheckGroups());
+        if (setmeal.getCheckGroups() == null) {
+            setmealMapper.addCheckGroups(setmeal.getId(), itemIds);
         } else {
             System.out.println("没有检查组！添加失败！");
         }
 
     }
 
+    /**
+     * 查询所有的检查组信息
+     * @return
+     */
     @Override
-    public Integer[] findCheckGroup() {
+    public CheckGroup[] findCheckGroup() {
 
-        return new Integer[0];
+        return setmealMapper.findCheckGroup();
     }
 }

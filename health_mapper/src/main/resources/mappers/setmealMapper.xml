@@ -12,7 +12,7 @@
     </select>
 
     <!--添加套餐-->
-    <insert id="addSetmeal" useGeneratedKeys="true" keyColumn="id">
+    <insert id="addSetmeal" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
         insert into t_setmeal values(null , #{name},#{code},#{helpCode},#{sex},#{age},#{price},#{remark},#{attention},#{img})
     </insert>
     <!--添加套餐包含的检查组-->
@@ -22,4 +22,8 @@
             (#{groupId} , #{id})
         </foreach>
     </insert>
+    <!--查询所有的检查组信息-->
+    <select id="findCheckGroup" resultType="checkGroup">
+        select * from t_checkgroup
+    </select>
 </mapper>

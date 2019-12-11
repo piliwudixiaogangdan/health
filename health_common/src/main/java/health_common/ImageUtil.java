@@ -19,6 +19,11 @@ public class ImageUtil {
     private static String bucket = "piliwudixiaogangdan";                          //必填
     private static  Configuration cfg = new Configuration(Region.huanan());
 
+    /**
+     *上传图片
+     * @param fileBytes
+     * @param fileName
+     */
     public static void uploadFile(byte[] fileBytes , String fileName) {
         //构造一个带指定 Region 对象的配置类
         Configuration cfg = new Configuration(Region.huanan());                     //指定上传的区服
@@ -56,12 +61,12 @@ public class ImageUtil {
      * 删除文件
      */
 
-    public static void deleteFile(String key) {
+    public static void deleteFile(String imageName) {
 
         Auth auth = Auth.create(accessKey, secretKey);
         BucketManager bucketManager = new BucketManager(auth, cfg);
         try {
-            bucketManager.delete(bucket, key);
+            bucketManager.delete(bucket, imageName);
         } catch (QiniuException ex) {
             //如果遇到异常，说明删除失败
             System.err.println(ex.code());

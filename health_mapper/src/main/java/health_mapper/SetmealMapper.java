@@ -12,5 +12,7 @@ public interface SetmealMapper {
 
     void addSetmeal(Setmeal setmeal);
 
-    void addCheckGroups(@Param("groupId") Integer id, @Param("ids") List<CheckGroup> checkGroups);
+    void addCheckGroups(@Param("groupId") Integer id, @Param("ids") Integer[] itemIds);
+
+    CheckGroup[] findCheckGroup();
 }

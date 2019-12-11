@@ -16,6 +16,7 @@
         <module>health_pojo</module>
         <module>health_service</module>
         <module>health_web</module>
+        <module>quartz</module>
     </modules>
 
 

@@ -1,7 +1,6 @@
 package health_web;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.sun.org.apache.regexp.internal.RE;
 import health_interface.CheckItemService;
 import health_pojo.entity.PageResult;
 import health_pojo.entity.QueryPageBean;

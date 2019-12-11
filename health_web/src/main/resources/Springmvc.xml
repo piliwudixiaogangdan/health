@@ -4,6 +4,8 @@
        xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
+    <import resource="classpath:applicationContext-redis.xml"></import>
+
     <mvc:annotation-driven>
         <!--将默认的jackson的消息转换器替换为FastJson的消息转换器-->
         <mvc:message-converters>

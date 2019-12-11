@@ -78,7 +78,7 @@
                 <div class="box">
                     <div class="filter-container">
                         <el-input placeholder="编码/名称/助记码" v-model="pagination.queryString" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"></el-input>
-                        <el-button @click="findPage()" class="dalfBut">查询</el-button>
+                        <el-button @click="fingPageByContition()" class="dalfBut">查询</el-button>
                         <el-button type="primary" class="butT" @click="handleCreate()">新建</el-button>
                     </div>
                     <el-table size="small" current-row-key="id" :data="dataList" stripe highlight-current-row>
@@ -255,13 +255,12 @@
                             this.$message({
                                 type : response.flag ? "success" : "error",
                                 message : response.message}
-
-
                             )
                         this.imageUrl = response.data;
-
-
+                            //为表单添加图片路径属性
+                            this.formData.img = response.data;
                 },
+
                 //上传图片之前执行
                 beforeAvatarUpload(file) {
 				  const isJPG = file.type === 'image/jpeg';
@@ -277,9 +276,10 @@
                 //添加
                 handleAdd () {
                     if (this.checkgroupIds.length != 0) {
-                        axios.post("/setmeal/addSetmeal.do", this.formData).then((res) => {
+                        axios.post("/setmeal/addSetmeal.do?itemIds="+this.checkgroupIds, this.formData).then((res) => {
                             if (res) {
                                 this.$message.success(res.data.message);
+                                this.dialogFormVisible = false;
                                 this.findPage();
                             } else {
                                 this.$message.error(res.data.message);
@@ -289,6 +289,11 @@
                         this.$message.error("请至少选择一个检查组！");
                     }
 
+                },
+
+                fingPageByContition() {
+                    this.pagination.currentPage=1;
+                    this.findPage();
                 },
                 //分页查询
                 findPage() {
@@ -302,6 +307,7 @@
                     this.formData = {};
                     this.checkgroupIds = [];
                     this.activeName = 'first';
+                    this.imageUrl = null;
                 },
                 // 弹出添加窗口
                 handleCreate() {
@@ -312,14 +318,17 @@
 
                 //查询套餐所包含的检查组信息
                 findCheckGroup() {
-                    axios.post("/setmeal/findCheckGroup").then((res) => {
+                    axios.post("/setmeal/findCheckGroup.do").then((res) => {
                         this.tableData = res.data;
                     });
                 },
 
                 //切换页码
                 handleCurrentChange(currentPage) {
+                    this.pagination.currentPage = currentPage;
+                    this.findPage();
                 }
+
             }
         })
     </script>

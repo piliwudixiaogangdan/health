@@ -6,12 +6,15 @@ import health_interface.SetmealService;
 import health_pojo.entity.PageResult;
 import health_pojo.entity.QueryPageBean;
 import health_pojo.entity.Result;
+import health_pojo.pojo.CheckGroup;
 import health_pojo.pojo.Setmeal;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import redis.clients.jedis.JedisPool;
 
 import java.io.IOException;
 import java.util.List;
@@ -24,6 +27,8 @@ public class SetmealWeb {
     @Reference
     private SetmealService setMealService;
 
+    @Autowired
+    private JedisPool jedisPool;
     /**
      * 查询套餐列表
      * @param queryPageBean
@@ -39,20 +44,27 @@ public class SetmealWeb {
      * 查询检查组id列表
      * @return
      */
-    public Integer[] findCheckGroup() {
+    @RequestMapping("findCheckGroup.do")
+    public CheckGroup[] findCheckGroup() {
        return setMealService.findCheckGroup();
 
     }
 
     /**
-     * 添加
+     * 向数据库 添加 套餐信息
      * @param setmeal
      * @return
      */
     @RequestMapping("/addSetmeal.do")
-    public Result addSetmeal(@RequestBody Setmeal setmeal) {
-        setMealService.addSetmeal(setmeal);
-        return new Result(true, "添加成功！");
+    public Result addSetmeal(@RequestParam("itemIds")Integer[] itemIds,@RequestBody Setmeal setmeal) {
+        try {
+            setMealService.addSetmeal(setmeal , itemIds);
+            jedisPool.getResource().sadd("sjkImg" , setmeal.getImg());
+            return new Result(true, "添加成功！");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "添加失败");
+        }
     }
 
     /**
@@ -69,14 +81,17 @@ public class SetmealWeb {
             String fileName = UUID.randomUUID().toString() + "." + prefix;
             try {
                 ImageUtil.uploadFile(file.getBytes() , fileName);
+                jedisPool.getResource().sadd("qnyImg" , fileName);
                 return new Result(true, "图片上传成功！",  "http://q271bmd79.bkt.clouddn.com/"+fileName);
+                //上传图片成功之后向redis数据库保存一份
+
             } catch (IOException e) {
                 return new Result(false, "文件上传失败");
             }
         } else {
             return new Result(false, "文件上传失败");
         }
-
-
     }
+
+
 }
