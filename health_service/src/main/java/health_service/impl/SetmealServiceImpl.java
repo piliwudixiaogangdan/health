@@ -58,4 +58,24 @@ public class SetmealServiceImpl implements SetmealService {
 
         return setmealMapper.findCheckGroup();
     }
+
+    /**
+     * 查询所有的套餐列表（不分页）
+     */
+    @Override
+    public Setmeal[] findAllSetmeal() {
+       return setmealMapper.findAllSetmeal();
+    }
+
+    @Override
+    public Setmeal findSetmealDetail(int id) {
+
+        return setmealMapper.findSetmealDetail(id);
+    }
+
+    @Override
+    public Setmeal findSetmealDetailById(int id) {
+
+        return setmealMapper.findSetmealDetailById(id);
+    }
 }

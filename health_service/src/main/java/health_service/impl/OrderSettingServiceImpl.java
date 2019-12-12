@@ -47,7 +47,7 @@ public class OrderSettingServiceImpl implements OrderSettingService {
 
     @Override
     public void handleOrderSet(Date day, int count) {
-String sday = ""+(day.getYear()+1900)+"-"+(day.getMonth()+1)+"-"+day.getDate();
+        String sday = ""+(day.getYear()+1900)+"-"+(day.getMonth()+1)+"-"+day.getDate();
         OrderSetting orderSetting = orderSettingMapper.findOrderSetting(day);
         if (orderSetting == null) {
             OrderSetting orderSetting1 = new OrderSetting();

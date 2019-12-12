@@ -18,6 +18,7 @@
         <module>health_web</module>
         <module>quartz</module>
         <module>health_mobile</module>
+        <module>health_mobile_web</module>
     </modules>
 
 

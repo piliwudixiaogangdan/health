@@ -17,4 +17,10 @@ public interface SetmealService {
     void addSetmeal(Setmeal setmeal , Integer[] itemIds);
 
     CheckGroup[] findCheckGroup();
+
+    Setmeal[] findAllSetmeal();
+
+    Setmeal findSetmealDetail(int id);
+
+    Setmeal findSetmealDetailById(int id);
 }

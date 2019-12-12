@@ -41,7 +41,7 @@ import java.util.*;
             orderSettings.add(orderSetting);
         }
         ordersettingService.importOrderSettings(orderSettings);
-        return null;
+        return new Result(true,"上传文件成功！");
     }
 
     @RequestMapping("/findOrderSettingByDate")

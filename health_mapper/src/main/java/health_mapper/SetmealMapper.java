@@ -15,4 +15,10 @@ public interface SetmealMapper {
     void addCheckGroups(@Param("groupId") Integer id, @Param("ids") Integer[] itemIds);
 
     CheckGroup[] findCheckGroup();
+
+    Setmeal[] findAllSetmeal();
+
+    Setmeal findSetmealDetail(@Param("id") int id);
+
+    Setmeal findSetmealDetailById(@Param("id")int id);
 }

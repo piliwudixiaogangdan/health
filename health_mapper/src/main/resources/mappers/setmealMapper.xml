@@ -26,4 +26,63 @@
     <select id="findCheckGroup" resultType="checkGroup">
         select * from t_checkgroup
     </select>
+
+    <!--不分页查询所有的套餐信息-->
+    <select id="findAllSetmeal" resultType="setmeal">
+        select * from t_setmeal
+    </select>
+
+<!--    &lt;!&ndash;根据id查询套餐内所有的信息&ndash;&gt;-->
+<!--    <resultMap id="setmeal" type="setmeal" autoMapping="true">-->
+<!--        <id column="id" property="id"></id>-->
+<!--        <collection property="checkGroups" column="id" javaType="List" ofType="checkGroup" autoMapping="true">-->
+<!--            <id column="gid" property="id"></id>-->
+<!--            <collection property="checkItems" column="gid" javaType="List" ofType="checkItem" autoMapping="true">-->
+<!--                <id column="iid" property="id"></id>-->
+<!--            </collection>-->
+<!--        </collection>-->
+
+<!--    </resultMap>-->
+<!--    <select id="findSetmealDetail" resultMap="setmeal">-->
+<!--        SELECT s.id ,s.name ,s.sex ,s.price ,s.remark , s.img ,-->
+<!--	           g.id gid , g.name gname , g.remark gremark , g.attention gatt,-->
+<!--	           i.id iid , i.name iname , i.attention iattention , i.remark iremark-->
+<!--        FROM-->
+<!--	        t_setmeal s-->
+<!--	    INNER JOIN t_setmeal_checkgroup sg ON s.id = sg.setmeal_id-->
+<!--	    INNER JOIN t_checkgroup g ON g.id = sg.checkgroup_id-->
+<!--	    INNER JOIN t_checkgroup_checkitem gi ON gi.checkgroup_id = g.id-->
+<!--	    INNER JOIN t_checkitem i ON gi.checkitem_id = i.id-->
+<!--	    where s.id=#{id}-->
+<!--    </select>-->
+
+        <!--通过id查询套餐信息-->
+        <resultMap id="setmeal" type="setmeal" autoMapping="true">
+            <collection property="checkGroups" javaType="List" ofType="CheckGroup"
+                        select="selectCheckGroupsById" column="id"></collection>
+        </resultMap>
+        <select id="findSetmealDetail" resultMap="setmeal">
+            select * from t_setmeal where id=#{id}
+        </select>
+
+        <!--通过套餐id查询检查组信息-->
+        <resultMap id="checkGroup" type="checkGroup" >
+            <collection property="checkItems" column="id" ofType="checkItem" javaType="List"
+                        select="selectCheckItemById"></collection>
+        </resultMap>
+        <select id="selectCheckGroupsById" resultMap="checkGroup">
+            select * from t_checkgroup where id in
+            (select checkgroup_id from t_setmeal_checkgroup where setmeal_id = #{id})
+        </select>
+
+        <!--通过检查组id查询检查项所有信息-->
+       <select id="selectCheckItemById" resultType="checkItem">
+            select * from t_checkgroup  where id in
+            (select checkitem_id from t_checkgroup_checkitem where checkgroup_id=#{id})
+       </select>
+
+        <!--通过检查组id查询检查项信息-->
+        <select id="findSetmealDetailById" resultType="setmeal">
+            select * from t_setmeal where id=#{id}
+        </select>
 </mapper>
