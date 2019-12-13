@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="health_mapper.MOrderMapper">
+
+    <insert id="addOrderInfo">
+        insert into t_order values (null,#{memberId} , #{orderDate} , #{orderType} , #{orderStatus} , #{setmealId})
+    </insert>
+
+    <select id="findOrderRecord" resultType="order">
+        select * from t_order where member_id=#{memberId} and orderDate=#{orderDate}
+    </select>
+
+    <select id="findOrderDetail" resultType="map">
+        select orderDate , orderType , m.name member,  s.name setmeal
+        from t_member m , t_order o, t_setmeal s
+        where o.member_id=m.id and o.setmeal_id=s.id and o.member_id=#{memberId}
+    </select>
+
+</mapper>

@@ -121,8 +121,10 @@
                         }
                         validateCodeButton = $("#validateCodeButton")[0];//使用变量validateCodeButton用来接收input标签
                         clock = window.setInterval(doLoop, 1000); //每隔一秒执行一次doLoop方法
-                        
-						
+
+                        axios.post("/code/sendValidateCode.do?telephone="+telephone).then((res) => {
+                                this.$message.success(res.data.message)
+                        });
                     },
                     //提交预约
                     submitOrder(){
@@ -132,8 +134,12 @@
                             return ;
                         }
                        //发送请求提交预约数据
-                        axios.post("").then((res) => {
-
+                        axios.post("/order/addOrderInfo.do" , this.orderInfo).then((res) => {
+                            if (!res.data.flag) {
+                                this.$message.error(res.data.message);
+                            } else {
+                                window.location.href = "/pages/orderSuccess.html?id="+res.data.data
+                            }
                         });
 					   
                     }

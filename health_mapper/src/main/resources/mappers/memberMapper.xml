@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="health_mapper.MOrderMapper">
+    <!--通过电话查询该会员是否存在-->
+    <select id="findMemberBytelephone" resultType="member" >
+        select * from t_member where phoneNumber=#{telephone}
+    </select>
+
+    <!--添加用户-->
+    <insert id="addMember" useGeneratedKeys="true" keyProperty="id">
+        insert into t_member values(null , null  , #{name} , #{sex} , #{idCard} , #{phoneNumber} , #{regTime} , null , null , null , null)
+    </insert>
+</mapper>
