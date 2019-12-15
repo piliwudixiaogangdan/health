@@ -2,10 +2,11 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
     <import resource="classpath:applicationContext-redis.xml"></import>
-
+    <import resource="classpath:springContext-security.xml"></import>
     <mvc:annotation-driven>
         <!--将默认的jackson的消息转换器替换为FastJson的消息转换器-->
         <mvc:message-converters>
@@ -13,7 +14,7 @@
                 <!--设置支持的多媒体类型：处理json数据-->
                 <property name="supportedMediaTypes" value="application/json"/>
                 <!--设置fastJson的其他配置-->
-                <property name="fastJsonConfig" ref="fastJsonConfig"></property>
+                <property name="fastJsonConfig" ref="fastJsonConfig" ></property>
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
@@ -35,9 +36,13 @@
         <property name="defaultEncoding" value="UTF-8"/>
     </bean>
 
+
     <!--配置dubbo消费端-->
     <dubbo:application name="health_web"></dubbo:application>
     <dubbo:annotation package="health_web"></dubbo:annotation>
     <dubbo:registry address="zookeeper://localhost:2181"></dubbo:registry>
     <dubbo:consumer check="false" timeout="6000000"></dubbo:consumer>
+
+
+
 </beans>

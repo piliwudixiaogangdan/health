@@ -1,4 +1,4 @@
-package health_web;
+package health_web.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import health_common.POIUtils;

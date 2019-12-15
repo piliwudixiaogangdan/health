@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <!--配置权限控制-->
+    <!--配置拦截路径-->
+    <security:http auto-config="true" use-expressions="true">
+        <security:intercept-url pattern="/pages/*" access="isAuthenticated()"></security:intercept-url>
+        <!--配置认证通过、失败、未通过时默认的跳转页面-->
+        <security:form-login login-page="/login.html"
+                             login-processing-url="/login.do"
+                             default-target-url="/pages/main.html"
+                             authentication-failure-forward-url="/login.html"
+                             username-parameter="username"
+                             password-parameter="password"></security:form-login>
+
+        <!--取消scrf-->
+        <security:csrf disabled="true"></security:csrf>
+        <security:headers disabled="true"/>
+    </security:http>
+
+    <!--配置认证管理器-->
+    <security:authentication-manager>
+        <security:authentication-provider user-service-ref="userSecurity">
+            <security:password-encoder ref="passwordEncoder" ></security:password-encoder>
+
+        </security:authentication-provider>
+    </security:authentication-manager>
+    <bean id="userSecurity" class="health_web.security.UserSecurity"></bean>
+    <!--指定加密对象-->
+    <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></bean>
+</beans>

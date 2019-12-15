@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="health_mapper.UserMapper">
+    <!--查询该用户的角色和权限-->
+    <resultMap id="user" type="user" autoMapping="true">
+        <id column="uid" property="id"></id>
+        <result column="uuname" property="username"></result>
+        <result column="password" property="password"></result>
+        <collection property="roles"  javaType="List" ofType="Role" autoMapping="true">
+            <result column="rn" property="name" ></result>
+            <result column="rk" property="keyword"></result>
+            <collection property="permissions" javaType="list" ofType="permission" autoMapping="true">
+                <result column="pn" property="name"></result>
+                <result column="pk" property="keyword"></result>
+            </collection>
+        </collection>
+    </resultMap>
+    <select id="findByuserName" resultMap="user">
+        SELECT
+	t_user.id uid,
+	t_user.username uuname,
+	t_user.PASSWORD,
+	t_role.id rid,
+	t_role.name rn,
+	t_role.keyword rk,
+	t_permission.name pn,
+	t_permission.keyword pk
+FROM
+	t_user
+	INNER JOIN t_user_role ON t_user.id = user_id
+	INNER JOIN t_role ON role_id = t_role.id
+	inner join t_role_permission on t_role_permission.role_id=t_role.id
+	inner join t_permission on t_role_permission.permission_id=t_permission.id
+	where t_user.username=#{username}
+    </select>
+
+</mapper>
