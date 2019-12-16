@@ -1,4 +1,4 @@
-package health_web;
+package health_web.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import health_interface.CheckGroupService;
@@ -6,6 +6,7 @@ import health_pojo.entity.PageResult;
 import health_pojo.entity.QueryPageBean;
 import health_pojo.entity.Result;
 import health_pojo.pojo.CheckGroup;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
